@@ -4,26 +4,27 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var index = require('./routes/index');
-var users = require('./routes/users');
+var log4js = require('./service/utils/logger');
 
 var app = express();
+global.appRoot = path.resolve(__dirname) + '/';
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+var api = require('./service/api')();
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+// log4js
+let accessLogger = log4js.getLogger('access');
+app.use(log4js.connectLogger(accessLogger));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/api', api);
+app.use('/', function(req, res) {
+  res.sendfile("./public/index.html");
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,4 +44,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+// module.exports = app;
+
+app.listen(3000);
