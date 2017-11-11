@@ -1,18 +1,22 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var log4js = require('./service/utils/logger');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const Promise = require('bluebird');
 
-var app = express();
-global.appRoot = path.resolve(__dirname) + '/';
+const log4js = require('./service/utils/logger');
+const stringUtil = require('./service/utils/string');
+const cache = require('./service/utils/cache');
 
-var api = require('./service/api')();
+
+let app = express();
+
+let api = require('./service/api')();
 
 // log4js
 let accessLogger = log4js.getLogger('access');
+let logger = log4js.getLogger(__dirname.replace(APPROOT_PATH, ''));
 app.use(log4js.connectLogger(accessLogger));
 
 app.use(bodyParser.json());
@@ -45,5 +49,24 @@ app.use(function(err, req, res, next) {
 });
 
 // module.exports = app;
+function init() {
+  let registrys = {};
 
-app.listen(3000);
+  logger.info("Init function: load registry config to cache");
+  if (fs.existsSync(REGISTRY_CONFIG_PATH)) {
+    registrys = JSON.parse(fs.readFileSync(REGISTRY_CONFIG_PATH));
+    cache.set(REGISTRY_CACHE_KEY, registrys);
+  } else {
+    cache.set(REGISTRY_CACHE_KEY, {});
+  }
+  return Promise.resolve(registrys);
+}
+
+init().then(function() {
+  let port = process.env.PORT | 3000;
+  
+  logger.info("Start function: start app on http://0.0.0.0:" + port);
+  app.listen(port);
+}).catch(function(err) {
+  console.log(err);
+});

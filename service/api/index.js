@@ -7,6 +7,8 @@ let http = function http(apiMethod) {
         let object = req.body;
         let options = _.extend({}, {ip: req.ip}, req.query, req.params);
 
+        console.log(object);
+
         if(_.isEmpty(object)) {
             object = {};
         }
@@ -19,7 +21,7 @@ let http = function http(apiMethod) {
         }).catch(function(error) {
             res.set('Content-Type', 'application/json');
             res.status(500).json({
-                error: error.message
+                message: error.message
             })
         });
     }
@@ -30,6 +32,7 @@ module.exports = function apiRouter() {
 
     apiRouter.get('/registrys', http(registry.browse));
     apiRouter.post('/registrys', http(registry.add));
+    apiRouter.delete('/registrys/:registryKey', http(registry.del));
 
     return apiRouter;
 }

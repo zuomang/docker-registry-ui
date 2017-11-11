@@ -41,21 +41,22 @@ module.exports = {
             inject: 'body',
             filename: 'index.html'
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
-            comments: false,
-            compress: {
-                warnings: false,
-                drop_console: true,
-                collapse_vars: true,
-                reduce_vars: true,
-            }
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     beautify: false,
+        //     comments: false,
+        //     compress: {
+        //         warnings: false,
+        //         // drop_console: true,
+        //         collapse_vars: true,
+        //         reduce_vars: true,
+        //     }
+        // }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
             Popper: ['popper.js', 'default'],
+            axios: 'axios'
         }),
         extractLess
     ],
