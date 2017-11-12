@@ -7,8 +7,6 @@ let http = function http(apiMethod) {
         let object = req.body;
         let options = _.extend({}, {ip: req.ip}, req.query, req.params);
 
-        console.log(object);
-
         if(_.isEmpty(object)) {
             object = {};
         }
@@ -16,7 +14,7 @@ let http = function http(apiMethod) {
         return apiMethod(object = object, options = options).then(function(data) {
             res.set('Content-Type', 'application/json');
             res.json({
-                data: data
+                message: data
             });
         }).catch(function(error) {
             res.set('Content-Type', 'application/json');

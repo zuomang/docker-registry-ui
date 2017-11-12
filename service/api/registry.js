@@ -32,6 +32,7 @@ registrys = {
 
         let key = stringUtil.md5(object["name"]);
         let registrys = cache.get(REGISTRY_CACHE_KEY);
+        let newRegistry = {};
         
         if(key in registrys) {
             return Promise.reject(new Error("Already had exists the registry"));
@@ -48,7 +49,8 @@ registrys = {
                         } catch(e) {
                             reject(e);
                         }
-                        resolve(registrys);
+                        newRegistry[key] = object;
+                        resolve(newRegistry);
                     }
                 });
             });

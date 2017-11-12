@@ -58,6 +58,7 @@ function init() {
     cache.set(REGISTRY_CACHE_KEY, registrys);
   } else {
     cache.set(REGISTRY_CACHE_KEY, {});
+    fs.mkdirSync(path.dirname(REGISTRY_CONFIG_PATH));
   }
   return Promise.resolve(registrys);
 }
