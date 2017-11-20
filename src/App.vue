@@ -111,6 +111,7 @@ export default {
           $('#info').removeClass('alert-success').toggleClass('fade');
         }, 5000);
         this.newRegistry.url = this.newRegistry.name = "";
+        this.$store.commit('registry/add', response.data.message);
       }).catch((err) => {
         $('#info').addClass('alert-danger').html(err.response.data.message).toggleClass('fade');
         setTimeout(function() {

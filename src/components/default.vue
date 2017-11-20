@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4">
+    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry">
       <div class="card">
         <div class="card-header card-header-primary">{{ registry.name }}</div>
         <div class="card-block">
@@ -30,6 +30,10 @@
 .single {
   display: inline;
 }
+
+.view-registry {
+  margin-bottom: 10px;
+}
 </style>
 
 
@@ -38,18 +42,17 @@ export default {
   name: 'default',
   data: function() {
     return {
-      registrys: {}
     }
   },
-  created: function() {
-    axios.get('/api/registrys').then((response) => {
-      this.registrys = response.data.message;
-    });
+  computed: {
+    registrys() {
+      return this.$store.state.registry.registrys;
+    }
   },
   methods: {
     deleteRegistry: function(key) {
       axios.delete('/api/registrys/' + key).then((response) => {
-        this.registrys = response.data.message;
+        this.$store.commit('registry/delete', key);
         $('#info').addClass('alert-success').html("Success delete registry").toggleClass('fade');
         setTimeout(function() {
           $('#info').removeClass('alert-success').toggleClass('fade');
