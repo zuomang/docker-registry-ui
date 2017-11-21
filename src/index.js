@@ -16,5 +16,6 @@ new Vue({
     router: router,
     created: function() {
         this.$store.dispatch('registry/init');
+        this.$store.commit('breadcrumb/init');
     }
 })

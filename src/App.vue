@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">Docker Registry UI</a>
+      <router-link class="navbar-brand" to="/">Docker Registry UI</router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -10,7 +10,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="clusterlist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cluster</a>
               <div class="dropdown-menu" aria-labelledby="clusterlist">
-                <a class="dropdown-item" href="#">list</a>
+                <router-link class="dropdown-item" to="/">list</router-link>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#addRegistryModal">add</a>
               </div>
             </li>
@@ -24,7 +24,16 @@
     <div class="alert fade" role="alert" id="info">
     </div>
     <div class="container">
-        <router-view></router-view>
+      <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" v-for="(item, index) in breadcrumb" :key="item.name" v-bind:class="{ active: index == breadcrumb.length - 1 }">
+            <p v-if="index == breadcrumb.length - 1">{{ item.name }}</p>
+            <!-- router-link 需要使用@click绑定事件 -->
+            <router-link v-bind:to="item.path" @click.native="location(index)" v-else>{{ item.name }}</router-link>
+          </li>
+        </ol>
+      </nav>
+      <router-view></router-view>
     </div>
     <div class="modal" id="addRegistryModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
@@ -85,6 +94,11 @@
   #info {
     position: absolute;
     right: 10px;
+    z-index: 100;
+  }
+
+  .breadcrumb-item p {
+    display: inline;
   }
 </style>
 
@@ -97,6 +111,11 @@ export default {
         url: "",
         name: ""
       }
+    }
+  },
+  computed: {
+    breadcrumb() {
+      return this.$store.state.breadcrumb.data;
     }
   },
   methods: {
@@ -121,6 +140,9 @@ export default {
       });
 
       $('#addRegistryModal').modal('hide');
+    },
+    location: function(index) {
+      this.$store.commit('breadcrumb/del', index);
     }
   }
 }

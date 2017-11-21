@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry">
+    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry" v-on:click="testBreadcrumb">
       <div class="card">
         <div class="card-header card-header-primary">{{ registry.name }}</div>
         <div class="card-block">
@@ -34,6 +34,11 @@
 .view-registry {
   margin-bottom: 10px;
 }
+
+.card-block table {
+  word-break: break-all;
+  word-wrap: break-word;
+}
 </style>
 
 
@@ -64,6 +69,9 @@ export default {
         }, 5000);
       });
     }
+  },
+  created: function() {
+    this.$store.commit('breadcrumb/init')
   }
 }
 </script>
