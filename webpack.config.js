@@ -18,10 +18,10 @@ function resolve(dir) {
 module.exports = {
     entry: {
         index: resolve('src') + '/index.js',
-        // common: resolve(src) + '/common.js',
     },
     output: {
-        filename: 'js/[name].js',
+        filename: 'js/[name].[chunkhash].js',
+        chunkFilename: 'js/[name].[chunkhash].js',
         path: resolve('public')
     },
     resolve: {
@@ -39,18 +39,23 @@ module.exports = {
             title: 'Docker Registry UI',
             template: resolve('src') + '/index.html',
             inject: 'body',
-            filename: 'index.html'
+            filename: 'index.html',
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQutes: true
+            }
         }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     beautify: false,
-        //     comments: false,
-        //     compress: {
-        //         warnings: false,
-        //         // drop_console: true,
-        //         collapse_vars: true,
-        //         reduce_vars: true,
-        //     }
-        // }),
+        new webpack.optimize.UglifyJsPlugin({
+            beautify: false,
+            comments: false,
+            compress: {
+                warnings: false,
+                drop_console: true,
+                collapse_vars: true,
+                reduce_vars: true,
+            }
+        }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
@@ -58,10 +63,40 @@ module.exports = {
             Popper: ['popper.js', 'default'],
             axios: 'axios'
         }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: function(module) {
+                return (
+                    module.resource &&
+                    /\.js$/.test(module.resource) &&
+                    module.resource.indexOf(
+                        path.join(__dirname, 'node_modules')
+                    ) === 0
+                )
+            }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            minChunks: Infinity
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'app',
+            async: 'vendor-async',
+            children: true,
+            minChunks: 3
+        }),
         extractLess
     ],
     module: {
         rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                include: [resolve('src')],
+                use: {
+                    loader: 'babel-loader',
+                }
+            },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'

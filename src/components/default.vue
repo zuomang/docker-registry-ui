@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry" v-on:click="testBreadcrumb">
+    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry">
       <div class="card">
         <div class="card-header card-header-primary">{{ registry.name }}</div>
         <div class="card-block">
