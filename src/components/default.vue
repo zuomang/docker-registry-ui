@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     deleteRegistry: function(key) {
-      axios.delete('/api/registrys/' + key).then((response) => {
+      axios.delete(`/api/registrys/${key}`).then((response) => {
         this.$store.commit('registry/delete', key);
         $('#info').addClass('alert-success').html("Success delete registry").toggleClass('fade');
         setTimeout(function() {
@@ -66,6 +66,7 @@ export default {
         $('#info').addClass('alert-danger').html(err.response.data.message).toggleClass('fade');
         setTimeout(function() {
           $('#info').removeClass('alert-danger').toggleClass('fade');
+          console.log("this is test");
         }, 5000);
       });
     }

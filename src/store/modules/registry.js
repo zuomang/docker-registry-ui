@@ -3,34 +3,32 @@ import Vue from 'vue';
 import _ from 'lodash';
 
 const state = {
-    registrys: {}
-}
+  registrys: {},
+};
 
 const mutations = {
-    init(state, registrys) {
-        state.registrys = registrys;
-    },
-    delete(state, key) {
-        Vue.delete(state.registrys, key);
-    },
-    add(state, registry) {
-        state.registrys = _.assign({}, state.registrys, registry);
-    }
-}
+  init(s, registrys) {
+    s.registrys = registrys;
+  },
+  delete(s, key) {
+    Vue.delete(s.registrys, key);
+  },
+  add(s, registry) {
+    s.registrys = _.assign({}, s.registrys, registry);
+  },
+};
 
 const actions = {
-    init({ commit, state }) {
-        axios.get('/api/registrys').then((response) => {
-            commit('init', response.data.message);
-        }).catch((err) => {
-            console.log(err.response.data.message);
-        })
-    }
-}
+  init({ commit }) {
+    axios.get('/api/registrys').then((response) => {
+      commit('init', response.data.message);
+    });
+  },
+};
 
 export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations
-}
+  namespaced: true,
+  state,
+  actions,
+  mutations,
+};

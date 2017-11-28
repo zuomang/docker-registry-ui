@@ -1,9 +1,9 @@
-const LRU = require("lru-cache")
+const LRU = require('lru-cache');
 
-let option = {
-    max: 1000
-}
+const option = {
+  max: 1000,
+};
 
-let cache = LRU(option);
+const cache = LRU(option);
 
 module.exports = cache;

@@ -6,11 +6,9 @@ import breadcrumb from './modules/breadcrumb';
 
 Vue.use(Vuex);
 
-const debug = process.env.NODE_ENV !== 'production';
-
 export default new Vuex.Store({
-    modules: {
-        registry: registry,
-        breadcrumb: breadcrumb
-    }
+  modules: {
+    registry,
+    breadcrumb,
+  },
 });

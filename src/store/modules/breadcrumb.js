@@ -1,22 +1,22 @@
 const state = {
-    data: []
-}
+  data: [],
+};
 
 const mutations = {
-    init(state) {
-        state.data = [];
-        state.data.push({path: "/", name: "Home"});
-    },
-    add(state, path) {
-        state.data.push(path);
-    },
-    del(state, index) {
-        state.data = state.data.slice(0, index + 1);
-    }
-}
+  init(s) {
+    s.data.splice(0);
+    s.data.push({ path: '/', name: 'Home' });
+  },
+  add(s, path) {
+    s.data.push(path);
+  },
+  del(s, index) {
+    s.data.splice(index);
+  },
+};
 
 export default {
-    namespaced: true,
-    state,
-    mutations
-}
+  namespaced: true,
+  state,
+  mutations,
+};
