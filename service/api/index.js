@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const express = require('express');
 const registry = require('./registry');
+const repostitory = require('./repository');
 
 const http = function http(apiMethod) {
   return function apiHandler(req, res) {
@@ -13,7 +14,7 @@ const http = function http(apiMethod) {
       object = {};
     }
 
-    return apiMethod(object, options).then((data) => {
+    return apiMethod(options, object).then((data) => {
       res.set('Content-Type', 'application/json');
       res.json({
         message: data,
@@ -33,6 +34,8 @@ module.exports = function apiRouter() {
   router.get('/registrys', http(registry.browse));
   router.post('/registrys', http(registry.add));
   router.delete('/registrys/:registryKey', http(registry.del));
+
+  router.get('/registrys/:key', http(repostitory.list));
 
   return router;
 };

@@ -25,7 +25,7 @@ const registry = {
     return Promise.resolve(registrys);
   },
 
-  add: function add(object) {
+  add: function add(options, object) {
     const key = stringUtil.md5(object.name);
     const registrys = cache.get(REGISTRY_CACHE_KEY);
     const newRegistry = {};
@@ -52,7 +52,7 @@ const registry = {
     }));
   },
 
-  del: function del(object, options) {
+  del: function del(options) {
     const key = options.registryKey;
     const registrys = cache.get(REGISTRY_CACHE_KEY) || {};
 
