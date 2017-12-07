@@ -10,7 +10,7 @@ const logger = require('../utils/logger').getLogger(__filename.replace(APPROOT_P
 
 const repository = {
   list(options) {
-    const { key, n = 2, last = '' } = options;
+    const { key, n = 50, last = '' } = options;
     const address = cache.get(REGISTRY_CACHE_KEY)[key].url;
     const url = `${address}/v2/_catalog?n=${n}&last=${last}`;
     const cacheKey = `${key}:${n}:${last}`;
@@ -24,7 +24,7 @@ const repository = {
           if (headers && headers.link) {
             const link = headers.link.split(';')[0];
             const path = link.slice(1, link.length - 1).split('?')[1];
-            next = `api/registrys/${key}?${path}`;
+            next = `/api/registrys/${key}?${path}`;
           }
           const result = headers.link ? { nextUrl: next, repositories: data.repositories } :
             { repositories: data.repositories };
