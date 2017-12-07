@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry">
+    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry" v-on:click="location(key, registry)">
       <div class="card">
         <div class="card-header card-header-primary">{{ registry.name }}</div>
         <div class="card-block">
@@ -18,7 +18,7 @@
           </table>
         </div>
         <div class="card-footer btn-pair">
-          <button type="submit" class="btn btn-danger btn-sm" v-on:click="deleteRegistry(key)">delete</button>
+          <button type="submit" class="btn btn-danger btn-sm" v-on:click.stop="deleteRegistry(key)">delete</button>
           <button type="button" class="btn btn-primary btn-sm">edit</button>
         </div>
       </div>
@@ -50,12 +50,12 @@ export default {
     }
   },
   computed: {
-    registrys() {
+    registrys(key) {
       return this.$store.state.registry.registrys;
     }
   },
   methods: {
-    deleteRegistry: function(key) {
+    deleteRegistry(key) {
       axios.delete(`/api/registrys/${key}`).then((response) => {
         this.$store.commit('registry/delete', key);
         $('#info').addClass('alert-success').html("Success delete registry").toggleClass('fade');
@@ -69,6 +69,11 @@ export default {
           console.log("this is test");
         }, 5000);
       });
+    },
+    location(key, path) {
+      // change breadcrumb
+      this.$store.commit('breadcrumb/add', path);
+      this.$router.push('/registry/' + key);
     }
   },
   created: function() {
