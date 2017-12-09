@@ -4,9 +4,9 @@
 const cache = require('../utils/cache');
 const fs = require('fs');
 const Promise = require('bluebird');
+const axios = require('axios');
 
 const stringUtil = require('../utils/string');
-const client = require('../utils/client');
 const logger = require('../utils/logger').getLogger(__filename.replace(APPROOT_PATH, ''));
 
 function flush(registrys) {
@@ -20,25 +20,28 @@ function flush(registrys) {
 }
 
 const registry = {
-  browse: function browse() {
+  list: function browse() {
     const registrys = cache.get(REGISTRY_CACHE_KEY);
     return Promise.resolve(registrys);
   },
 
   add: function add(options, object) {
-    const key = stringUtil.md5(object.name);
+    const key = stringUtil.md5(object.name.toLowerCase().replace(' ', '-'));
     const registrys = cache.get(REGISTRY_CACHE_KEY);
     const newRegistry = {};
 
+    logger.info('start add registry function');
     if (key in registrys) {
+      logger.error(`named ${object.name} registry had exists the registry`);
       return Promise.reject(new Error('Already had exists the registry'));
     }
     return new Promise(((resolve, reject) => {
-      client.get(object.url, (error, response) => {
-        if (error) {
-          reject(error);
-        }
-        if (response && response.statusCode === 200) {
+      axios({
+        method: 'get',
+        url: `${object.url}/v2/`,
+      }).then((response) => {
+        if (response.status === 200) {
+          logger.info('verify new registry done');
           try {
             registrys[key] = object;
             flush(registrys);
@@ -48,6 +51,9 @@ const registry = {
           newRegistry[key] = object;
           resolve(newRegistry);
         }
+      }).catch((err) => {
+        logger.error(`can not access registry server ${object.url}: ${err}`);
+        reject(err);
       });
     }));
   },

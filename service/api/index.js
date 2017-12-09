@@ -4,6 +4,7 @@ const _ = require('lodash');
 const express = require('express');
 const registry = require('./registry');
 const repostitory = require('./repository');
+// const tag = require('./tag');
 
 const http = function http(apiMethod) {
   return function apiHandler(req, res) {
@@ -31,11 +32,11 @@ const http = function http(apiMethod) {
 module.exports = function apiRouter() {
   const router = express.Router();
 
-  router.get('/registrys', http(registry.browse));
+  router.get('/registrys', http(registry.list));
   router.post('/registrys', http(registry.add));
   router.delete('/registrys/:registryKey', http(registry.del));
 
-  router.get('/registrys/:key', http(repostitory.list));
+  router.get('/registrys/:key/repos', http(repostitory.list));
 
   return router;
 };

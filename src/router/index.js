@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Default from '@/components/default';
-import Repository from '@/components/repository';
+import Home from '@/components/home';
+import Registry from '@/components/registry';
 
 Vue.use(Router);
 
@@ -10,11 +10,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: Default,
+      component: Home,
     },
     {
-      path: '/registry/:key',
-      component: Repository,
+      path: '/:name',
+      component: Registry,
     },
   ],
 });

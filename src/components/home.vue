@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry" v-on:click="location(key, registry)">
+    <div v-for="(registry, key) in registrys" :key="key" class="col-md-4 view-registry" v-on:click="location(registry)">
       <div class="card">
         <div class="card-header card-header-primary">{{ registry.name }}</div>
         <div class="card-block">
@@ -70,10 +70,15 @@ export default {
         }, 5000);
       });
     },
-    location(key, path) {
+    location(registry) {
       // change breadcrumb
-      this.$store.commit('breadcrumb/add', path);
-      this.$router.push('/registry/' + key);
+      const path = registry.name.toLowerCase().replace(' ', '-');
+      const data = {
+        'name': registry.name,
+        'path': path
+      }
+      this.$store.commit('breadcrumb/add', data);
+      this.$router.push('/' + path);
     }
   },
   created: function() {

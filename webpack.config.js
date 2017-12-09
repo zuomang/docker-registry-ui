@@ -22,6 +22,7 @@ module.exports = {
     filename: 'js/[name].[chunkhash].js',
     chunkFilename: 'js/[name].[chunkhash].js',
     path: resolve('public'),
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -45,16 +46,16 @@ module.exports = {
         removeAttributeQutes: true,
       },
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      compress: {
-        warnings: false,
-        drop_console: true,
-        collapse_vars: true,
-        reduce_vars: true,
-      },
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+      // beautify: false,
+      // comments: false,
+      // compress: {
+        // warnings: false,
+        // // drop_console: true,
+        // collapse_vars: true,
+        // reduce_vars: true,
+      // },
+    // }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -67,8 +68,8 @@ module.exports = {
       minChunks(module) {
         return (
           module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(path.join(__dirname, 'node_modules')) === 0
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(path.join(__dirname, 'node_modules')) === 0
         );
       },
     }),
@@ -86,15 +87,15 @@ module.exports = {
   ],
   module: {
     rules: [
-      {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [resolve('src')],
-        options: {
-          // fix: true,
-        },
-      },
+      // {
+        // test: /\.(js|vue)$/,
+        // loader: 'eslint-loader',
+        // enforce: 'pre',
+        // include: [resolve('src')],
+        // options: {
+          // // fix: true,
+        // },
+      // },
       {
         test: /\.vue$/,
         loader: 'vue-loader',

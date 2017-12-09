@@ -11,6 +11,7 @@
     "axios": "^0.17.0",
     "bluebird": "^3.5.1",
     "body-parser": "~1.18.2",
+    "bootstrap": "^4.0.0-beta.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
@@ -19,14 +20,14 @@
     "lodash": "^4.17.4",
     "log4js": "^2.3.11",
     "lru-cache": "^4.1.1",
+    "md5": "^2.2.1",
     "morgan": "~1.9.0",
     "popper.js": "^1.12.6",
     "request": "^2.83.0",
     "serve-favicon": "~2.4.5",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "bootstrap": "^4.0.0-beta.2"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

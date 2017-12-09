@@ -33,14 +33,16 @@
 </template>
 
 <script>
+const md5 = require('md5');
+
 export default {
   name: 'repository',
   data: function() {
     return {
-      baseURL: '/api/registrys/' + this.$route.params.key,
+      baseURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos',
       previousURL: "",
       currentURL: "",
-      nextURL: '/api/registrys/' + this.$route.params.key,
+      nextURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos',
       history: [],
       repos: {},
       previousDisable: true,

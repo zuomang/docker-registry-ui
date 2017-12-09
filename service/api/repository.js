@@ -23,8 +23,8 @@ const repository = {
           let next;
           if (headers && headers.link) {
             const link = headers.link.split(';')[0];
-            const path = link.slice(1, link.length - 1).split('?')[1];
-            next = `/api/registrys/${key}?${path}`;
+            const query = link.slice(1, link.length - 1).split('?')[1];
+            next = `/api/registrys/${key}/repos?${query}`;
           }
           const result = headers.link ? { nextUrl: next, repositories: data.repositories } :
             { repositories: data.repositories };
