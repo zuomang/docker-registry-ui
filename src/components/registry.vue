@@ -12,7 +12,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repo, index) in repos" :key="index" scope="row">
+            <tr v-for="(repo, index) in repos" :key="index" scope="row" v-on:click.stop="intoRepo(repo)">
               <td>{{ repo }}</td>
             </tr>
           </tbody>
@@ -36,7 +36,7 @@
 const md5 = require('md5');
 
 export default {
-  name: 'repository',
+  name: 'registry',
   data: function() {
     return {
       baseURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos',
@@ -135,6 +135,17 @@ export default {
           }, 5000);
         });
       }
+    },
+    intoRepo: function(repo) {
+      // update breadcrumb
+      const base = this.$store.state.breadcrumb.data[this.$store.state.breadcrumb.data.length - 1];
+      const end = encodeURIComponent(repo);
+      const path = base.path[base.path.length - 1] === '/' ? `${base.path}${end}` : `${base.path}/${end}`;
+      this.$store.commit('breadcrumb/add', {
+        name: repo,
+        path: path
+      });
+      this.$router.push(path);
     }
   }
 }

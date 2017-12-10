@@ -11,7 +11,7 @@ const mutations = {
     s.data.push(path);
   },
   del(s, index) {
-    s.data.splice(index);
+    s.data.splice(index + 1);
   },
 };
 

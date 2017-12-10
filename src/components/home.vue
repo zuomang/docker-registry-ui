@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: 'default',
+  name: 'home',
   data: function() {
     return {
     }
@@ -66,19 +66,19 @@ export default {
         $('#info').addClass('alert-danger').html(err.response.data.message).toggleClass('fade');
         setTimeout(function() {
           $('#info').removeClass('alert-danger').toggleClass('fade');
-          console.log("this is test");
         }, 5000);
       });
     },
     location(registry) {
-      // change breadcrumb
-      const path = registry.name.toLowerCase().replace(' ', '-');
-      const data = {
-        'name': registry.name,
-        'path': path
-      }
-      this.$store.commit('breadcrumb/add', data);
-      this.$router.push('/' + path);
+      // update breadcrumb
+      const base = this.$store.state.breadcrumb.data[this.$store.state.breadcrumb.data.length - 1];
+      const end = registry.name.toLowerCase().replace(' ', '-');
+      const path = base.path[base.path.length - 1] === '/' ? `${base.path}${end}` : `${base.path}/${end}`;
+      this.$store.commit('breadcrumb/add', {
+        name: registry.name,
+        path: path
+      });
+      this.$router.push(path);
     }
   },
   created: function() {
