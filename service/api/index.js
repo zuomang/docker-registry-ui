@@ -37,6 +37,7 @@ module.exports = function apiRouter() {
   router.delete('/registrys/:registryKey', http(registry.del));
 
   router.get('/registrys/:key/repos', http(repostitory.list));
+  router.get('/registrys/:key/repos/:repoName', http(repostitory.get));
 
   return router;
 };
