@@ -81,24 +81,25 @@ const repository = {
               .then((response) => {
                 const result = [];
                 response.forEach(({ data: { name, tag, history } }) => {
-                  const createdTime = JSON.parse(history[0].v1Compatibility).created;
+                  let createdTime = JSON.parse(history[0].v1Compatibility).created;
+                  createdTime = `${createdTime.split('.')[0]}Z`;
                   result.push({ name, tag, createdTime });
                 });
                 data.tags = _.sortBy(result, ['createdTime']).reverse();
                 cache.set(cacheKey, data, TTL);
-                return resolve(data);
+                resolve(data);
               }).catch((err) => {
                 logger.info(`Failed get ${repoName} tags detail info: ${err}`);
-                return reject(err);
+                reject(err);
               });
           } else {
             data.tags = tags;
             cache.set(cacheKey, data, TTL);
-            return resolve(data);
+            resolve(data);
           }
         }).catch((err) => {
           logger.info(`Failed get ${repoName} tag list: ${err}`);
-          return reject(err);
+          reject(err);
         });
       }
     });

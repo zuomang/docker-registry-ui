@@ -2,18 +2,24 @@
   <div>
     <div class="card max" style="width: 100%">
       <div class="card-header">
-        All repositories
+        <h4>all tag</h4>
+        <ul>
+          <li>before delete tag, you need <a href="https://docs.docker.com/registry/configuration/#delete">enable delete feature</a></li>
+          <li>after delete tag, you need <a href="https://docs.docker.com/registry/garbage-collection/">run grabage collect</a></li>
+        </ul>
       </div>
       <div class="card-body">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">name</th>
+              <th scope="col">tag</th>
+              <th scope="col">created time</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repo, index) in repos" :key="index" scope="row" v-on:click.stop="intoRepo(repo)">
-              <td>{{ repo }}</td>
+            <tr v-for="(tag, index) in tags" :key="index" scope="row">
+              <td>{{ tag.tag }}</td>
+              <td>{{ tag.createdTime }}</td>
             </tr>
           </tbody>
         </table>
@@ -36,15 +42,15 @@
 const md5 = require('md5');
 
 export default {
-  name: 'registry',
+  name: 'repository',
   data: function() {
     return {
-      baseURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos',
+      baseURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos/' + encodeURIComponent(this.$route.params.repo),
       previousURL: "",
       currentURL: "",
-      nextURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos',
+      nextURL: '/api/registrys/' + md5(this.$route.params.name) + '/repos/' + encodeURIComponent(this.$route.params.repo),
       history: [],
-      repos: {},
+      tags: [],
       previousDisable: true,
       nextDisable: true
     }
@@ -65,7 +71,7 @@ export default {
         } else {
           this.nextDisable = true;
         }
-        this.repos = response.data.message.repositories;
+        this.tags = response.data.message.tags;
       }).catch((err) => {
         $('#info').addClass('alert-danger').html(err.response.data.message).toggleClass('fade');
         setTimeout(function() {
@@ -97,7 +103,7 @@ export default {
             this.nextDisable = true;
           }
           // 设置当前页的data
-          this.repos = response.data.message.repositories;
+          this.tags = response.data.message.tags;
         }).catch((err) => {
           $('#info').addClass('alert-danger').html(err.response.data.message).toggleClass('fade');
           setTimeout(function() {
@@ -129,7 +135,7 @@ export default {
           }
 
           // 设置当前页的data
-          this.repos = response.data.message.repositories;
+          this.tags = response.data.message.tags;
         }).catch((err) => {
           $('#info').addClass('alert-danger').html(err.response.data.message).toggleClass('fade');
           setTimeout(function() {
@@ -138,18 +144,8 @@ export default {
         });
         document.documentElement.scrollTop = 0;
       }
-    },
-    intoRepo: function(repo) {
-      // update breadcrumb
-      const base = this.$store.state.breadcrumb.data[this.$store.state.breadcrumb.data.length - 1];
-      const end = encodeURIComponent(repo);
-      const path = base.path[base.path.length - 1] === '/' ? `${base.path}${end}` : `${base.path}/${end}`;
-      this.$store.commit('breadcrumb/add', {
-        name: repo,
-        path: path
-      });
-      this.$router.push(path);
     }
   }
 }
 </script>
+
