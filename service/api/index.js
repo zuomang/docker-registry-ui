@@ -4,7 +4,7 @@ const _ = require('lodash');
 const express = require('express');
 const registry = require('./registry');
 const repostitory = require('./repository');
-// const tag = require('./tag');
+const image = require('./image');
 
 const http = function http(apiMethod) {
   return function apiHandler(req, res) {
@@ -38,6 +38,8 @@ module.exports = function apiRouter() {
 
   router.get('/registrys/:key/repos', http(repostitory.list));
   router.get('/registrys/:key/repos/:repoName', http(repostitory.get));
+
+  router.delete('/registrys/:key/repos/:repoName/image/:imageName', http(image.del));
 
   return router;
 };
